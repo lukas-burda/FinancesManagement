@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 interface FinancialRecord {
+  id: number;
   date: string;
   amount: number;
   description: string;
@@ -10,13 +11,6 @@ interface FinancialRecord {
 export const RecordsTableView: React.FC = () => {
   const [FinancialRecords, setFinancialRecords] = useState<FinancialRecord[]>();
 
-  const filterOptions = [
-    "Last 30 days",
-    "Last Month",
-    "Last 6 Months",
-    "Last 1 year",
-  ];
-
   useEffect(() => {
     populateFinancialData();
   }, []);
@@ -25,6 +19,17 @@ export const RecordsTableView: React.FC = () => {
     const response = await fetch("api/FinancialRecords/records");
     const data = await response.json();
     setFinancialRecords(data);
+  }
+
+  async function deleteFinancialRecord(id: number) {
+    const response = await fetch("api/FinancialRecords/?id=" + id, {
+      method: "DELETE",
+    });
+    if (response.status == 200) {
+      populateFinancialData()
+    } else {
+      return <>Error</>;
+    }
   }
 
   const table =
@@ -53,7 +58,10 @@ export const RecordsTableView: React.FC = () => {
           </thead>
           <tbody>
             {FinancialRecords.map((FinancialRecord) => (
-              <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+              <tr
+                className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                key={FinancialRecord.id}
+              >
                 <td className="px-6 py-4">{FinancialRecord.date}</td>
                 <th
                   scope="row"
@@ -69,6 +77,17 @@ export const RecordsTableView: React.FC = () => {
                     className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                   >
                     Edit
+                  </a>
+                </td>
+                <td className="px-6 py-4">
+                  <a
+                    onClick={()=>{
+                      deleteFinancialRecord(FinancialRecord.id)
+                    }}
+                    href="#"
+                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  >
+                    Delete
                   </a>
                 </td>
               </tr>

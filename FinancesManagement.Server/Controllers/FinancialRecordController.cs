@@ -12,12 +12,9 @@ namespace FinancesManagement.Server.Controllers
     public class FinancialRecordsController : ControllerBase
     {
         private readonly IFinancialRecordService _financialRecordService;
-        private readonly IResumeTotalsService _resumeTotalsService;
-
-        public FinancialRecordsController(IFinancialRecordService financialRecordService, IResumeTotalsService resumeTotalsService)
+        public FinancialRecordsController(IFinancialRecordService financialRecordService)
         {
             _financialRecordService = financialRecordService;
-            _resumeTotalsService = resumeTotalsService;
         }
 
         // Add a new financial record
@@ -35,6 +32,35 @@ namespace FinancesManagement.Server.Controllers
             }
 
         }
+
+        [HttpPut]
+        public IActionResult UpdateRecord(FinancialRecordModel record) 
+        {
+            try
+            {
+                _financialRecordService.UpdateRecord(record);
+                return CreatedAtAction(nameof(this.UpdateRecord), record);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteRecord(int id)
+        {
+            try
+            {
+                _financialRecordService.DeleteRecord(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         // Get a list of all financial records
         [HttpGet("records")]
@@ -66,20 +92,6 @@ namespace FinancesManagement.Server.Controllers
             }
         }
 
-        [HttpGet("totals")]
-        public async Task<IActionResult> GetTotals(DateTime? fromDate, DateTime? toDate, string? classification)
-        {
-            try
-            {
-                var totals = await _resumeTotalsService.GetAndCalculateTotals(fromDate, toDate, classification);
-                return Ok(totals);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpGet("existentClassifications")]
         public async Task<IActionResult> GetExistentClassifications()
         {
@@ -93,5 +105,7 @@ namespace FinancesManagement.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
     }
 }

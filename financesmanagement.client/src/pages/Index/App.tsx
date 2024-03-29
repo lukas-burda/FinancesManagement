@@ -14,8 +14,8 @@ function App() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <RecordsTableView></RecordsTableView>
+      <h1 className="text-3xl font-bold underline">Financial Sheet 📊</h1>
+      <RecordsTableView />
     </div>
   );
 }
