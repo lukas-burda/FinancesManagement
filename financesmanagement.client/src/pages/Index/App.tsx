@@ -1,6 +1,6 @@
 import { } from "react";
 import "./App.css";
-import { RecordsTableView } from "../../components/smalls/biggers/RecordsTableView";
+import { RecordsTableView } from "../../components/biggers/RecordsTableView";
 
 // interface FinancialRecord {
 //   date: string;
