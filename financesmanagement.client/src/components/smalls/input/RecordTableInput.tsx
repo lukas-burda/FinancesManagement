@@ -1,33 +1,53 @@
+import CurrencyInput from "react-currency-input-field";
 import { useState } from "react";
 import { FinancialRecordClass } from "../../../model/FinancialRecord/FinancialRecord";
 
-export const RecordTableInput: React.FC = () => {
-  const [financialRecord, setFinancialRecord] = useState<FinancialRecordClass>(
-    new FinancialRecordClass(1, '', 0, "", "")
-  );
+interface RecordTableInputProps {
+  repopulateList(): void;
+}
 
-  const [classifications,setClassifications] = useState<string[]>([])
+export const RecordTableInput: React.FC<RecordTableInputProps> = ({
+  repopulateList,
+}) => {
+  const [financialRecord, setFinancialRecord] = useState<FinancialRecordClass>(
+    new FinancialRecordClass(1, "", 0, "", "")
+  );
+  console.log(financialRecord);
+  const [classifications, setClassifications] = useState<string[]>([]);
+
+  function isValidRecord(record:FinancialRecordClass){
+    return record.amount != 0 && record.description != "" ? true : false
+  }
 
   async function AddFinancialRecord(financialRecord: FinancialRecordClass) {
-    if (financialRecord != null) {
+    if (isValidRecord(financialRecord)) {
       const response = await fetch("api/FinancialRecords/", {
         method: "POST",
-        headers:{ 'Content-Type' : 'application/json'},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(financialRecord),
       });
+      if (response.ok) {
+        repopulateList();
+      }
     }
   }
 
-  async function GetClassificationTypes(){
-    const response = await fetch("api/FinancialRecords/existentClassifications")
-    const data = await response.json();
-    setClassifications(data);
+  async function GetClassificationTypes() {
+    if(classifications.length == 0){
+      const response = await fetch(
+        "api/FinancialRecords/existentClassifications"
+      );
+      const data = await response.json();
+      setClassifications(data);
+    }
   }
 
   return (
-    <form className="flex">
+    <form className="w-full flex justify-around text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
       <input
-        className="p-2 m-2 border rounded-md"
+        required
+        itemScope={true}
+        className="p-2 m-2 rounded-md text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         type="date"
         placeholder="Date"
         value={financialRecord.date}
@@ -39,7 +59,8 @@ export const RecordTableInput: React.FC = () => {
         }
       />
       <input
-        className="p-2 m-2 border rounded-md"
+        required
+        className="p-2 m-2 rounded-md text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         type="text"
         placeholder="Description"
         value={financialRecord.description}
@@ -50,32 +71,49 @@ export const RecordTableInput: React.FC = () => {
           })
         }
       />
-      <input
-        className="p-2 m-2 border rounded-md"
-        type="numeric"
-        placeholder="Amount"
-        value={financialRecord.amount}
-        onChange={(e) =>
-          setFinancialRecord({
+
+      <CurrencyInput
+        required
+        className="p-2 m-2 rounded-md text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        placeholder="-R$ 0.00"
+        prefix="R$ "
+        step={0.01}
+        decimalsLimit={2}
+        onValueChange={(value, name, values) =>
+         setFinancialRecord({
             ...financialRecord,
-            amount: parseFloat(e.currentTarget?.value),
+            amount: values?.float ?? 0 ,
           })
         }
       />
-      <select className="p-2 m-2 border rounded-md" id="mySelect" name="options" onClick={()=>{GetClassificationTypes()}}>
-        {classifications.map((classification,index) => (
-          <option key={index} value={classification.toString()}>{classification}</option>
+      <select
+        className="p-2 m-2 px-6 rounded-md text-gray-700bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        name="options"
+        onClick={() => {
+          GetClassificationTypes();
+        }}
+        onChange={(e) => {
+          setFinancialRecord({
+            ...financialRecord,
+            classification: e.currentTarget?.value || "",
+          });
+        }}
+      >
+        {classifications.map((string, index) => (
+          <option key={index} value={string}>
+            {string}
+          </option>
         ))}
       </select>
-      <a
+      <button
+        className="px-4 m-2 bg-green-700 hover:bg-green-800 text-white font-bold rounded"
         type="submit"
-        href="#"
         onClick={() => {
           AddFinancialRecord(financialRecord);
         }}
       >
         Add
-      </a>
+      </button>
     </form>
   );
 };

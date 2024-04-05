@@ -3,7 +3,7 @@ import { RecordTableInput } from "../smalls/input/RecordTableInput";
 import { FinancialRecord } from "../../interface/Record/IFinancialRecord";
 
 export const RecordsTableView: React.FC = () => {
-  const [FinancialRecords, setFinancialRecords] = useState<FinancialRecord[]>();
+  const [financialRecords, setFinancialRecords] = useState<FinancialRecord[]>();
 
   useEffect(() => {
     populateFinancialData();
@@ -25,59 +25,56 @@ export const RecordsTableView: React.FC = () => {
   }
 
   const table =
-    FinancialRecords === undefined ? (
-      <p>
-        <em>Loading details...</em>
-      </p>
-    ) : (
-      <div className="">
-        <table className="">
-          <thead className="">
+    financialRecords != null ? (
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="">
+              <th scope="col" className="py-3 px-6">
                 Date
               </th>
-              <th scope="col" className="">
+              <th scope="col" className="py-3 px-6">
                 Description
               </th>
-              <th scope="col" className="">
+              <th scope="col" className="py-3 px-6">
                 Amount
               </th>
-              <th scope="col" className="">
+              <th scope="col" className="py-3 px-6">
                 Classification
+              </th>
+              <th scope="col" className="py-3 px-6">
+                Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {FinancialRecords.map((FinancialRecord) => (
+            {financialRecords.map((FinancialRecord) => (
               <tr
-                className=""
+                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 key={FinancialRecord.id}
               >
-                <td className="px-6 py-4">{FinancialRecord.date.toString()}</td>
+                <td className="py-2 px-6">{FinancialRecord.date}</td>
                 <th
                   scope="row"
-                  className=""
+                  className="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
                   {FinancialRecord.description}
                 </th>
-                <td className="">{FinancialRecord.amount}</td>
-                <td className="">{FinancialRecord.classification}</td>
-                <td className="">
+                <td className="py-2 px-6">{FinancialRecord.amount}</td>
+                <td className="py-2 px-6">{FinancialRecord.classification}</td>
+                <td className="py-2 px-6">
                   <a
                     href="#"
                     className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                   >
                     Edit
                   </a>
-                </td>
-                <td className="px-6 py-4">
                   <a
                     onClick={() => {
                       deleteFinancialRecord(FinancialRecord.id);
                     }}
                     href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    className="font-medium text-red-600 dark:text-red-500 hover:underline ml-4"
                   >
                     Delete
                   </a>
@@ -86,8 +83,10 @@ export const RecordsTableView: React.FC = () => {
             ))}
           </tbody>
         </table>
-        <RecordTableInput/>
+        <RecordTableInput repopulateList={populateFinancialData} />
       </div>
+    ) : (
+      <h1>Loading...</h1>
     );
 
   return <>{table}</>;

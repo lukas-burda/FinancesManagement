@@ -1,4 +1,4 @@
-import { } from "react";
+import {} from "react";
 import "./App.css";
 import { RecordsTableView } from "../../components/biggers/RecordsTableView";
 
@@ -10,11 +10,9 @@ import { RecordsTableView } from "../../components/biggers/RecordsTableView";
 // }
 
 function App() {
-
-
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">Financial Sheet 📊</h1>
+      <h1 className="p-5 text-3xl font-bold">Financial Sheet 📊</h1>
       <RecordsTableView />
     </div>
   );
