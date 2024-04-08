@@ -8,6 +8,7 @@ import { RecordTableInput } from "../../components/RecordsTable/RecordTableInput
 import { IFinanceSummary } from "../../domain/interface/Resumes/IResume";
 
 function App() {
+  
   useEffect(() => {
     populateFinancialData();
     populateResumeData();

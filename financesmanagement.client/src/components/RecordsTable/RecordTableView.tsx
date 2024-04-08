@@ -133,7 +133,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
                 >
                   {FinancialRecord.description}
                 </th>
-                <td className="py-2 px-6">{FinancialRecord.amount}</td>
+                <td className="py-2 px-6">R$ {FinancialRecord.amount.toFixed(2)}</td>
                 <td className="py-2 px-6">{FinancialRecord.classification}</td>
                 <td className="py-2 px-6">
                   <a
