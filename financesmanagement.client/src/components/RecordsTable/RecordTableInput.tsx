@@ -1,6 +1,6 @@
 import CurrencyInput from "react-currency-input-field";
 import { useState } from "react";
-import { FinancialRecordClass } from "../../../model/FinancialRecord/FinancialRecord";
+import { FinancialRecordClass } from "../../domain/model/FinancialRecord/FinancialRecord";
 
 interface RecordTableInputProps {
   repopulateList(): void;
@@ -12,7 +12,6 @@ export const RecordTableInput: React.FC<RecordTableInputProps> = ({
   const [financialRecord, setFinancialRecord] = useState<FinancialRecordClass>(
     new FinancialRecordClass(1, "", 0, "", "")
   );
-  console.log(financialRecord);
   const [classifications, setClassifications] = useState<string[]>([]);
 
   function isValidRecord(record:FinancialRecordClass){
@@ -79,7 +78,7 @@ export const RecordTableInput: React.FC<RecordTableInputProps> = ({
         prefix="R$ "
         step={0.01}
         decimalsLimit={2}
-        onValueChange={(value, name, values) =>
+        onValueChange={(_value, _name, values) =>
          setFinancialRecord({
             ...financialRecord,
             amount: values?.float ?? 0 ,

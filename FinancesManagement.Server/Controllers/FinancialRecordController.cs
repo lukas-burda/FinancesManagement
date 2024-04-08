@@ -63,22 +63,22 @@ namespace FinancesManagement.Server.Controllers
 
 
         // Get a list of all financial records
-        [HttpGet("records")]
-        public async Task<IActionResult> GetRecords()
-        {
-            try
-            {
-                var records = await _financialRecordService.GetAllRecords();
-                return Ok(records);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpGet("records")]
+        //public async Task<IActionResult> GetRecords()
+        //{
+        //    try
+        //    {
+        //        var records = await _financialRecordService.GetAllRecords();
+        //        return Ok(records);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         // Get a summary of totals based on date filter
-        [HttpGet("recordsFilter")]
+        [HttpGet("records")]
         public async Task<IActionResult> recordsFiltered(DateTime? fromDate, DateTime? toDate, string? classification)
         {
             try

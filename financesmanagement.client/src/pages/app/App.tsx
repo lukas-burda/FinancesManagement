@@ -1,6 +1,6 @@
 import {} from "react";
 import "./App.css";
-import { RecordsTableView } from "../../components/biggers/RecordsTableView";
+import { RecordTableView } from "../../components/RecordsTable/RecordTableView";
 
 // interface FinancialRecord {
 //   date: string;
@@ -12,8 +12,7 @@ import { RecordsTableView } from "../../components/biggers/RecordsTableView";
 function App() {
   return (
     <div>
-      <h1 className="p-5 text-3xl font-bold">Financial Sheet 📊</h1>
-      <RecordsTableView />
+      <RecordTableView />
     </div>
   );
 }
