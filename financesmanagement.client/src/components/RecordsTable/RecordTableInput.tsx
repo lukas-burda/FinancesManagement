@@ -3,19 +3,20 @@ import { useState } from "react";
 import { FinancialRecordClass } from "../../domain/model/FinancialRecord/FinancialRecord";
 
 interface RecordTableInputProps {
-  repopulateList(): void;
+  repopulateFinancialData(): void;
 }
 
 export const RecordTableInput: React.FC<RecordTableInputProps> = ({
-  repopulateList,
+  repopulateFinancialData
 }) => {
   const [financialRecord, setFinancialRecord] = useState<FinancialRecordClass>(
     new FinancialRecordClass(1, "", 0, "", "")
   );
+
   const [classifications, setClassifications] = useState<string[]>([]);
 
-  function isValidRecord(record:FinancialRecordClass){
-    return record.amount != 0 && record.description != "" ? true : false
+  function isValidRecord(record: FinancialRecordClass) {
+    return record.amount != 0 && record.description != "" ? true : false;
   }
 
   async function AddFinancialRecord(financialRecord: FinancialRecordClass) {
@@ -26,13 +27,13 @@ export const RecordTableInput: React.FC<RecordTableInputProps> = ({
         body: JSON.stringify(financialRecord),
       });
       if (response.ok) {
-        repopulateList();
+        repopulateFinancialData();
       }
     }
   }
 
   async function GetClassificationTypes() {
-    if(classifications.length == 0){
+    if (classifications.length == 0) {
       const response = await fetch(
         "api/FinancialRecords/existentClassifications"
       );
@@ -59,7 +60,7 @@ export const RecordTableInput: React.FC<RecordTableInputProps> = ({
       />
       <input
         required
-        className="p-2 m-2 rounded-md text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        className="p-2 m-2 px-5 rounded-md text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         type="text"
         placeholder="Description"
         value={financialRecord.description}
@@ -73,20 +74,20 @@ export const RecordTableInput: React.FC<RecordTableInputProps> = ({
 
       <CurrencyInput
         required
-        className="p-2 m-2 rounded-md text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        className="p-2 m-2 px-lg-5 rounded-md text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         placeholder="-R$ 0.00"
         prefix="R$ "
         step={0.01}
         decimalsLimit={2}
         onValueChange={(_value, _name, values) =>
-         setFinancialRecord({
+          setFinancialRecord({
             ...financialRecord,
-            amount: values?.float ?? 0 ,
+            amount: values?.float ?? 0,
           })
         }
       />
       <select
-        className="p-2 m-2 px-6 rounded-md text-gray-700bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        className="p-2 m-2 px-8 rounded-md text-gray-700bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         name="options"
         onClick={() => {
           GetClassificationTypes();
@@ -105,7 +106,7 @@ export const RecordTableInput: React.FC<RecordTableInputProps> = ({
         ))}
       </select>
       <button
-        className="px-4 m-2 bg-green-700 hover:bg-green-800 text-white font-bold rounded"
+        className="px-6 m-2 bg-green-700 hover:bg-green-800 text-white font-bold rounded"
         type="submit"
         onClick={() => {
           AddFinancialRecord(financialRecord);
