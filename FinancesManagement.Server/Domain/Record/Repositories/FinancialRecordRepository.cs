@@ -1,4 +1,5 @@
-﻿using FinancesManagement.Server.Domain.Record.Models;
+﻿using FinancesManagement.Server.Domain.Models;
+using FinancesManagement.Server.Domain.Record.Models;
 using FinancesManagement.Server.Domain.Record.Repositories.Interfaces;
 using Npgsql;
 
@@ -71,32 +72,44 @@ namespace FinancesManagement.Server.Domain.Record.Repository
             }
         }
 
-        public async Task<IEnumerable<FinancialRecordModel>> GetRecordsFiltered(DateTime? fromDate = null, DateTime? toDate = null, string? classification = null)
+        public async Task<IEnumerable<FinancialRecordModel>> GetRecordsFiltered(QueryOptionsFilter queryOptions)
         {
             using (var connection = new NpgsqlConnection(GetConnectionString()))
             {
                 await connection.OpenAsync();
                 var query = "SELECT * FROM FinancialRecords WHERE 1 = 1";
 
-                if (fromDate.HasValue)
+                if (queryOptions.FromDate.HasValue)
                     query += " AND Date >= @FromDate";
 
-                if (toDate.HasValue)
+                if (queryOptions.ToDate.HasValue)
                     query += " AND Date <= @ToDate";
 
-                if (!string.IsNullOrEmpty(classification))
+                if (!string.IsNullOrEmpty(queryOptions.Classification))
                     query += " AND Classification = @Classification";
+
+                if (!string.IsNullOrEmpty(queryOptions.OrderBy) && !string.IsNullOrEmpty(queryOptions.OrderAscending))
+                {
+                    if (bool.Parse(queryOptions.OrderAscending))
+                    {
+                        query += $" ORDER BY {queryOptions.OrderBy} ASC";
+                    }
+                    else
+                    {
+                        query += $" ORDER BY {queryOptions.OrderBy} DESC";
+                    }
+                }
 
                 var command = new NpgsqlCommand(query, connection);
 
-                if (fromDate.HasValue)
-                    command.Parameters.AddWithValue("@FromDate", fromDate.Value);
+                if (queryOptions.FromDate.HasValue)
+                    command.Parameters.AddWithValue("@FromDate", queryOptions.FromDate.Value);
 
-                if (toDate.HasValue)
-                    command.Parameters.AddWithValue("@ToDate", toDate.Value);
+                if (queryOptions.ToDate.HasValue)
+                    command.Parameters.AddWithValue("@ToDate", queryOptions.ToDate.Value);
 
-                if (!string.IsNullOrEmpty(classification))
-                    command.Parameters.AddWithValue("@Classification", classification);
+                if (!string.IsNullOrEmpty(queryOptions.Classification))
+                    command.Parameters.AddWithValue("@Classification", queryOptions.Classification);
 
                 var reader = await command.ExecuteReaderAsync();
 

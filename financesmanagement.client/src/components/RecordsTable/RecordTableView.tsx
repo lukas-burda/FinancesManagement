@@ -57,7 +57,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
       <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
           <select
-            defaultValue={"Last Month"}
+            defaultValue={"All Time"}
             onChange={(e) => {
               const filter = filterOptionsData.find(
                 (f) => f.label == e.currentTarget.value

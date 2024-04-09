@@ -1,4 +1,5 @@
-﻿using FinancesManagement.Server.Domain.Record.Models;
+﻿using FinancesManagement.Server.Domain.Models;
+using FinancesManagement.Server.Domain.Record.Models;
 using FinancesManagement.Server.Domain.Record.Services.Interfaces;
 using FinancesManagement.Server.Domain.ResumeTotals.Services.Interfaces;
 using FinancesManagement.Server.Domain.Totals.Models;
@@ -79,11 +80,11 @@ namespace FinancesManagement.Server.Controllers
 
         // Get a summary of totals based on date filter
         [HttpGet("records")]
-        public async Task<IActionResult> recordsFiltered(DateTime? fromDate, DateTime? toDate, string? classification)
+        public async Task<IActionResult> recordsFiltered([FromQuery] QueryOptionsFilter queryOptions)
         {
             try
             {
-                var recordsFiltered = await _financialRecordService.GetRecordsFiltered(fromDate, toDate, classification);
+                var recordsFiltered = await _financialRecordService.GetRecordsFiltered(queryOptions);
                 return Ok(recordsFiltered);
             }
             catch (Exception ex)

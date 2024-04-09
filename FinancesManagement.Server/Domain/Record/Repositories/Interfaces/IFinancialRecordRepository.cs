@@ -1,4 +1,5 @@
-﻿using FinancesManagement.Server.Domain.Record.Models;
+﻿using FinancesManagement.Server.Domain.Models;
+using FinancesManagement.Server.Domain.Record.Models;
 namespace FinancesManagement.Server.Domain.Record.Repositories.Interfaces
 {
 
@@ -6,7 +7,7 @@ namespace FinancesManagement.Server.Domain.Record.Repositories.Interfaces
     {
         Task<IEnumerable<FinancialRecordModel>> GetAllRecords();
         Task<IEnumerable<FinancialRecordModel>> GetAllRecordsWithClassifications();
-        Task<IEnumerable<FinancialRecordModel>> GetRecordsFiltered(DateTime? fromDate = null, DateTime? toDate = null, string? classification = null);
+        Task<IEnumerable<FinancialRecordModel>> GetRecordsFiltered(QueryOptionsFilter queryOptions);
         Task<FinancialRecordModel> GetRecordById(int id);
         Task AddRecord(FinancialRecordModel record);
         Task UpdateRecord(FinancialRecordModel record);

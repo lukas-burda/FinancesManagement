@@ -1,4 +1,5 @@
-﻿using FinancesManagement.Server.Domain.ResumeTotals.Services.Interfaces;
+﻿using FinancesManagement.Server.Domain.Models;
+using FinancesManagement.Server.Domain.ResumeTotals.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancesManagement.Server.Controllers
@@ -15,11 +16,11 @@ namespace FinancesManagement.Server.Controllers
         }
 
         [HttpGet("totals")]
-        public async Task<IActionResult> GetTotals(DateTime? fromDate, DateTime? toDate, string? classification)
+        public async Task<IActionResult> GetTotals([FromQuery]QueryOptionsFilter queryOptions)
         {
             try
             {
-                var totals = await _resumeTotalsService.GetAndCalculateTotals(fromDate, toDate, classification);
+                var totals = await _resumeTotalsService.GetAndCalculateTotals(queryOptions);
                 return Ok(totals);
             }
             catch (Exception ex)
