@@ -11,7 +11,6 @@ function App() {
   
   useEffect(() => {
     populateFinancialData();
-    populateResumeData();
   }, []);
 
 
@@ -29,8 +28,9 @@ function App() {
     setFinancialRecords(value);
   };
 
-  async function populateResumeData() {
-    const response = await fetch("api/Resume/totals");
+  async function populateResumeData(url?:string) {
+    if (url == undefined) url = "";
+    const response = await fetch("api/Resume/totals?"+url);
     const data = await response.json();
     setFinancialSummary(data);
   }
@@ -40,7 +40,7 @@ function App() {
     const response = await fetch("api/FinancialRecords/records?" + url);
     const data = await response.json();
     setFinancialRecords(data);
-    populateResumeData();
+    populateResumeData(url)
   }
 
   return (
