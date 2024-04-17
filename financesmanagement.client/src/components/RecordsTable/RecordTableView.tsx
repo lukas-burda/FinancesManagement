@@ -39,7 +39,6 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
   }
 
   function handleSearchRecord(query: string) {
-    console.log(query)
     if (query == "" || query == null || query == undefined) {
       repopulateFinancialData();
     } else {
@@ -57,7 +56,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
       <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
           <select
-            defaultValue={"All Time"}
+            defaultValue={"Todo tempo"}
             onChange={(e) => {
               const filter = filterOptionsData.find(
                 (f) => f.label == e.currentTarget.value
@@ -111,46 +110,46 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
             <th scope="col" className="py-3 px-6">
               Classificação
             </th>
-            <th scope="col" className="py-3 px-6"></th>
+            <th scope="col" className="py-3 px-6"> </th>
           </tr>
         </thead>
         <tbody>
-          {financialRecords.map((FinancialRecord) => (
+          {financialRecords.map((financialRecord) => (
             <tr
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-              key={FinancialRecord.id}
+              key={financialRecord.id}
             >
               <td className="py-2 px-6">
-                {new Date(FinancialRecord.date).toLocaleDateString()}
+                {new Date(financialRecord.date).toLocaleDateString()}
               </td>
               <th
                 scope="row"
                 className="py-2 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                {FinancialRecord.description}
+                {financialRecord.description}
               </th>
               <td className="py-2 px-6">
-                {FinancialRecord.amount.toLocaleString("pt-BR", {
+                {financialRecord.amount.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
               </td>
-              <td className="py-2 px-6">{FinancialRecord.classification}</td>
+              <td className="py-2 px-6">{financialRecord.classification}</td>
               <td className="py-2 px-6">
                 <a
                   href="#"
                   className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
-                  Edit
+                  Editar
                 </a>
                 <a
                   href="#"
                   className="font-medium text-red-600 dark:text-red-500 hover:underline ml-4"
                   onClick={() => {
-                    deleteFinancialRecord(FinancialRecord.id);
+                    deleteFinancialRecord(financialRecord.id);
                   }}
                 >
-                  Delete
+                  Excluir
                 </a>
               </td>
             </tr>

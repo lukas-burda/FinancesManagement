@@ -8,12 +8,6 @@ import { RecordTableInput } from "../../components/RecordsTable/RecordTableInput
 import { IFinanceSummary } from "../../domain/interface/Resumes/IResume";
 
 function App() {
-  
-  useEffect(() => {
-    populateFinancialData();
-  }, []);
-
-
   const [financialSummary, setFinancialSummary] = useState<IFinanceSummary>({
     currentBalance: 0,
     expenseAmount: 0,
@@ -23,14 +17,14 @@ function App() {
   const [financialRecords, setFinancialRecords] = useState<FinancialRecord[]>(
     []
   );
-  /* handledata Change */
+
   const handleRefreshData = (value: FinancialRecord[]) => {
     setFinancialRecords(value);
   };
 
-  async function populateResumeData(url?:string) {
+  async function populateResumeData(url?: string) {
     if (url == undefined) url = "";
-    const response = await fetch("api/Resume/totals?"+url);
+    const response = await fetch("api/Resume/totals?" + url);
     const data = await response.json();
     setFinancialSummary(data);
   }
@@ -40,8 +34,16 @@ function App() {
     const response = await fetch("api/FinancialRecords/records?" + url);
     const data = await response.json();
     setFinancialRecords(data);
-    populateResumeData(url)
+    populateResumeData(url);
   }
+
+  useEffect(
+    () => {
+      populateFinancialData();
+      // console.log('i fire once') /* React.Strict on dev server? */
+    },
+    [] /* dont remove empty array depencies > cause: populateFinancialData loop */
+  );
 
   return (
     <div className="flex-inline justify-content-center p-6">

@@ -7,7 +7,7 @@ interface RecordTableInputProps {
 }
 
 export const RecordTableInput: React.FC<RecordTableInputProps> = ({
-  repopulateFinancialData
+  repopulateFinancialData,
 }) => {
   const [financialRecord, setFinancialRecord] = useState<FinancialRecordClass>(
     new FinancialRecordClass(1, "", 0, "", "")

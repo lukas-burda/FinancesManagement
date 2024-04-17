@@ -17,19 +17,19 @@ const currentDate = new Date();
 
  export const filterOptionsData = [
     {
-      label: "All Time",
+      label: "Todo Tempo",
       date: "",
     },
     {
-      label: "Last Month",
+      label: "Último Mês",
       date: lastMonthDate.toISOString(),
     },
     {
-      label: "Last Six Months",
+      label: "Últimos 6 Meses",
       date: lastSixMonthsDate.toISOString(),
     },
     {
-      label: "Last Year",
+      label: "Último Ano",
       date: lastYearDate.toISOString(),
     },
   ]
